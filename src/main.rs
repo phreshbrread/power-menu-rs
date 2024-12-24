@@ -13,7 +13,7 @@ slint::include_modules!();
 // - Force initially floating state in window managers
 // - Add icons, using gtk or qt theme
 
-const VERSION: &str = "0.1.0";
+const VERSION: &str = "1.0.0";
 
 const HELP_MESSAGE: &str = "Usage: power-menu-rs [options]
 
@@ -23,9 +23,9 @@ Options:
 
 fn main() -> Result<(), Box<dyn Error>> {
     // args[0] is the path
-    // Following are actual arguments
+    // following are actual arguments
 
-    let args: Vec<String> = env::args().collect(); // Collect cmd args
+    let args: Vec<String> = env::args().collect(); // collect cmd args
 
     if args.len() != 1 {
         if args[1] == "--version" {
@@ -41,29 +41,41 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     ui.on_request_shutdown({
         move || {
-            Command::new("systemctl")
-                .arg("shutdown")
-                .arg("now")
-                .spawn()
-                .expect("Shutdown command failed");
+            if cfg!(debug_assertions) {
+                println!("shutdown");
+            } else {
+                Command::new("systemctl")
+                    .arg("shutdown")
+                    .arg("now")
+                    .spawn()
+                    .expect("Shutdown command failed");
+            }
         }
     });
 
     ui.on_request_reboot({
         move || {
-            Command::new("systemctl")
-                .arg("reboot")
-                .spawn()
-                .expect("Shutdown command failed");
+            if cfg!(debug_assertions) {
+                println!("reboot");
+            } else {
+                Command::new("systemctl")
+                    .arg("reboot")
+                    .spawn()
+                    .expect("Shutdown command failed");
+            }
         }
     });
 
     ui.on_request_suspend({
         move || {
-            Command::new("systemctl")
-                .arg("suspend")
-                .spawn()
-                .expect("Shutdown command failed");
+            if cfg!(debug_assertions) {
+                println!("suspend");
+            } else {
+                Command::new("systemctl")
+                    .arg("suspend")
+                    .spawn()
+                    .expect("Shutdown command failed");
+            }
         }
     });
 
