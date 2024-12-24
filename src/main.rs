@@ -46,7 +46,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             } else {
                 Command::new("systemctl")
                     .arg("poweroff")
-                    .arg("now")
                     .spawn()
                     .expect("Shutdown command failed");
             }
