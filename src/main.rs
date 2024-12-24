@@ -41,19 +41,29 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     ui.on_request_shutdown({
         move || {
-            println!("Shutdown");
+            Command::new("systemctl")
+                .arg("shutdown")
+                .arg("now")
+                .spawn()
+                .expect("Shutdown command failed");
         }
     });
 
     ui.on_request_reboot({
         move || {
-            println!("Reboot");
+            Command::new("systemctl")
+                .arg("reboot")
+                .spawn()
+                .expect("Shutdown command failed");
         }
     });
 
     ui.on_request_suspend({
         move || {
-            println!("Suspend");
+            Command::new("systemctl")
+                .arg("suspend")
+                .spawn()
+                .expect("Shutdown command failed");
         }
     });
 
