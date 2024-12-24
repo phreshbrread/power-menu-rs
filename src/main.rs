@@ -8,7 +8,7 @@ use std::process::{self, Command};
 slint::include_modules!();
 
 // Todo:
-// - Add actual power controls
+// - Add shutdown/reboot/suspend timer
 // - Make initsys agnostic
 // - Force initially floating state in window managers
 // - Add icons, using gtk or qt theme
@@ -41,40 +41,28 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     ui.on_request_shutdown({
         move || {
-            if cfg!(debug_assertions) {
-                println!("shutdown");
-            } else {
-                Command::new("systemctl")
-                    .arg("poweroff")
-                    .spawn()
-                    .expect("Shutdown command failed");
-            }
+            Command::new("systemctl")
+                .arg("poweroff")
+                .spawn()
+                .expect("Shutdown command failed");
         }
     });
 
     ui.on_request_reboot({
         move || {
-            if cfg!(debug_assertions) {
-                println!("reboot");
-            } else {
-                Command::new("systemctl")
-                    .arg("reboot")
-                    .spawn()
-                    .expect("Shutdown command failed");
-            }
+            Command::new("systemctl")
+                .arg("reboot")
+                .spawn()
+                .expect("Reboot command failed");
         }
     });
 
     ui.on_request_suspend({
         move || {
-            if cfg!(debug_assertions) {
-                println!("suspend");
-            } else {
-                Command::new("systemctl")
-                    .arg("suspend")
-                    .spawn()
-                    .expect("Shutdown command failed");
-            }
+            Command::new("systemctl")
+                .arg("suspend")
+                .spawn()
+                .expect("Suspend command failed");
         }
     });
 
