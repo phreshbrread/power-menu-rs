@@ -1,32 +1,34 @@
-import { Button, VerticalBox, GridBox } from "std-widgets.slint";
+import { Button, VerticalBox, GridBox, Spinner } from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     width: 480px;
     height: 110px;
     title: "power-menu-rs";
 
+    callback request-shutdown();
+    callback request-reboot();
+    callback request-suspend();
     callback request-cancel();
-    callback request-power-action(int);
-
+    
     GridBox {
         Button {
             text: "Shutdown";
             clicked => {
-                root.request-power-action(0);
+                root.request-shutdown();
             }
         }
 
         Button {
             text: "Reboot";
             clicked => {
-                root.request-power-action(1);
+                root.request-reboot();
             }
         }
 
         Button {
             text: "Suspend";
             clicked => {
-                root.request-power-action(2);
+                root.request-suspend();
             }
         }
 
