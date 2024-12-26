@@ -46,11 +46,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .arg("now")
                 .spawn()
                 .expect("Reboot command failed");
-
-            /* Command::new("systemctl")
-            .arg("poweroff")
-            .spawn()
-            .expect("Shutdown command failed"); */
         }
     });
 
@@ -59,29 +54,17 @@ fn main() -> Result<(), Box<dyn Error>> {
             Command::new("reboot")
                 .spawn()
                 .expect("Reboot command failed");
-
-            /* Command::new("systemctl")
-            .arg("reboot")
-            .spawn()
-            .expect("Reboot command failed"); */
         }
     });
 
     app_window.on_request_suspend({
         move || {
-            // echo mem > /sys/power/state
+            // suspend will remain systemd dependent for now
 
-            Command::new("echo")
-                .arg("mem")
-                .arg(">")
-                .arg("/sys/power/state")
+            Command::new("systemctl")
+                .arg("suspend")
                 .spawn()
                 .expect("Suspend command failed");
-
-            /* Command::new("systemctl")
-            .arg("suspend")
-            .spawn()
-            .expect("Suspend command failed"); */
         }
     });
 
