@@ -14,13 +14,15 @@ slint::include_modules!();
 // - Force initial floating state in window managers
 // - Add icons, using gtk or qt theme
 
-const VERSION: &str = "1.0.0";
+const VERSION: &str = "1.0.1";
 
 const HELP_MESSAGE: &str = "Usage: power-menu-rs [options]
 
 Options:
     --help          Show this message
     --version       Show current version";
+
+    
 
 fn main() -> Result<(), Box<dyn Error>> {
     // args[0] is the path
@@ -38,9 +40,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         process::exit(0);
     }
 
-    let ui: AppWindow = AppWindow::new()?;
+    let app_window: AppWindow = AppWindow::new()?;
 
-    ui.on_request_shutdown({
+    app_window.on_request_shutdown({
         move || {
             Command::new("systemctl")
                 .arg("poweroff")
@@ -49,7 +51,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    ui.on_request_reboot({
+    app_window.on_request_reboot({
         move || {
             Command::new("systemctl")
                 .arg("reboot")
@@ -58,7 +60,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    ui.on_request_suspend({
+    app_window.on_request_suspend({
         move || {
             Command::new("systemctl")
                 .arg("suspend")
@@ -67,13 +69,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    ui.on_request_cancel({
+    app_window.on_request_cancel({
         move || {
             process::exit(0);
         }
     });
 
-    ui.run()?;
+    app_window.run()?;
 
     Ok(())
 }
