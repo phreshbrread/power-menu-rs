@@ -14,7 +14,7 @@ slint::include_modules!();
 // - Force initial floating state in window managers
 // - Add icons, using gtk or qt theme
 
-const VERSION: &str = "1.0.0";
+const VERSION: &str = "1.1.0";
 
 const HELP_MESSAGE: &str = "Usage: power-menu-rs [options]
 
@@ -38,42 +38,60 @@ fn main() -> Result<(), Box<dyn Error>> {
         process::exit(0);
     }
 
-    let ui: AppWindow = AppWindow::new()?;
+    let app_window: AppWindow = AppWindow::new()?;
 
-    ui.on_request_shutdown({
+    app_window.on_request_shutdown({
         move || {
-            Command::new("systemctl")
-                .arg("poweroff")
-                .spawn()
-                .expect("Shutdown command failed");
-        }
-    });
-
-    ui.on_request_reboot({
-        move || {
-            Command::new("systemctl")
-                .arg("reboot")
+            Command::new("shutdown")
+                .arg("now")
                 .spawn()
                 .expect("Reboot command failed");
+
+            /* Command::new("systemctl")
+            .arg("poweroff")
+            .spawn()
+            .expect("Shutdown command failed"); */
         }
     });
 
-    ui.on_request_suspend({
+    app_window.on_request_reboot({
         move || {
-            Command::new("systemctl")
-                .arg("suspend")
+            Command::new("reboot")
+                .spawn()
+                .expect("Reboot command failed");
+
+            /* Command::new("systemctl")
+            .arg("reboot")
+            .spawn()
+            .expect("Reboot command failed"); */
+        }
+    });
+
+    app_window.on_request_suspend({
+        move || {
+            // echo mem > /sys/power/state
+
+            Command::new("echo")
+                .arg("mem")
+                .arg(">")
+                .arg("/sys/power/state")
                 .spawn()
                 .expect("Suspend command failed");
+
+            /* Command::new("systemctl")
+            .arg("suspend")
+            .spawn()
+            .expect("Suspend command failed"); */
         }
     });
 
-    ui.on_request_cancel({
+    app_window.on_request_cancel({
         move || {
             process::exit(0);
         }
     });
 
-    ui.run()?;
+    app_window.run()?;
 
     Ok(())
 }
