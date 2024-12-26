@@ -8,8 +8,8 @@ use std::process::{self, Command};
 slint::include_modules!();
 
 // Todo:
+// - ESC to cancel
 // - Add app icon
-// - Add confirmation prompt
 // - Make initsystem agnostic
 // - Force initial floating state in window managers
 // - Add icons, using gtk or qt theme
