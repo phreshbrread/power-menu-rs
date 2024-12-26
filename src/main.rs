@@ -8,9 +8,10 @@ use std::process::{self, Command};
 slint::include_modules!();
 
 // Todo:
-// - Add shutdown/reboot/suspend timer
-// - Make initsys agnostic
-// - Force initially floating state in window managers
+// - Add app icon
+// - Add confirmation prompt
+// - Make initsystem agnostic
+// - Force initial floating state in window managers
 // - Add icons, using gtk or qt theme
 
 const VERSION: &str = "1.0.0";
