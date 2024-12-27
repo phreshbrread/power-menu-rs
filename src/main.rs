@@ -65,6 +65,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .arg("suspend")
                 .spawn()
                 .expect("Suspend command failed");
+
+            process::exit(0); // so app window doesn't remain open after suspending
         }
     });
 
