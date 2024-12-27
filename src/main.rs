@@ -1,9 +1,10 @@
 // Prevent console window in addition to Slint window in Windows release builds when, e.g., starting the app via file manager. Ignored on other platforms.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::env;
 use std::error::Error;
+use std::f32::consts::E;
 use std::process::{self, Command};
+use std::{env, str};
 
 slint::include_modules!();
 
@@ -61,10 +62,30 @@ fn main() -> Result<(), Box<dyn Error>> {
         move || {
             // suspend will remain systemd dependent for now
 
-            Command::new("systemctl")
-                .arg("suspend")
-                .spawn()
-                .expect("Suspend command failed");
+            // current best solution is probably to check which initsystem
+            // is in use, then run the appropriate suspend command
+
+            /* Command::new("systemctl")
+            .arg("suspend")
+            .spawn()
+            .expect("Suspend command failed"); */
+
+            // the following command should return the initsys in use:
+            // ps -p 1 -o comm=
+
+            let initsys_check = Command::new("ps")
+                .arg("-p")
+                .arg("1")
+                .arg("-o")
+                .arg("comm=")
+                .output()
+                .expect("Initsys check failed");
+
+            let initsys_result = str::from_utf8(&initsys_check.stdout).unwrap();
+
+            println!("Result: {}", initsys_result); // prints initsys
+
+            
 
             process::exit(0); // so app window doesn't remain open after suspending
         }
